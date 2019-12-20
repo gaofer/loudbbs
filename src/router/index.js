@@ -5,6 +5,7 @@ import Pindex from '../views/pindex.vue'
 import Login from  '../views/login.vue'
 import Reg from '../views/reg.vue'
 import Post from '../views/post.vue'
+import Overview from '../views/overview.vue'
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,15 @@ const routes = [
     component: Post,
     meta: {
       title: '发帖',
+      keepAlive: true, // 需要被缓存
+    }
+  },
+  {
+    path: '/overview',
+    name: 'overview',
+    component: Overview,
+    meta: {
+      title: '预览',
       keepAlive: true, // 需要被缓存
     }
   }

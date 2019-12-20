@@ -42,11 +42,11 @@
                                      label-width="80px"
                             >
                                 <div class="titlestyle">标题</div>
-                                <el-form-item label=" " prop="username">
-                                    <el-input v-model="postNew.username"></el-input>
+                                <el-form-item label=" " prop="topicn">
+                                    <el-input v-model="postNew.topicn"></el-input>
                                 </el-form-item>
                                 <el-form-item label="类别" prop="password">
-                                    <el-select v-model="value" clearable filterable placeholder="请选择">
+                                    <el-select v-model="valuecid" clearable filterable placeholder="请选择">
                                         <el-option
                                                 v-for="item in options"
                                                 :key="item.value"
@@ -55,7 +55,7 @@
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
-                                <el-form-item style="height: 450px" label="输入正文" prop="confirmPassword">
+                                <el-form-item style="height: 450px" label="输入正文">
                                     <!--<qeditor>
                                     </qeditor>-->
                                     <qeditor2 ref="wangE">
@@ -64,7 +64,7 @@
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="onSubmit('postNew')">立即创建</el-button>
-                                    <el-button @click="">预览</el-button>
+                                    <el-button @click="gooverview">预览</el-button>
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -107,17 +107,48 @@
         data() {
             return {
                 activeIndex2: '1',
-                postNew: {},
                 labelPosition: 'top',
                 options: [{
                     cid: '',
                     cname: ''
                 }],
-                value: '',
-                rules:{}
+                postNew: {
+                    topicn: ''
+                },
+                valuecid: '',
+                topic: {
+                    topicname: '',
+                    uid: '',
+                    cid: '',
+                    heat: '',
+                    htmlmainbody: '',
+                    mainbody: '',
+                    createtime: '',
+                    updatetime: ''
+                },
+
+                rules: {}
             }
+
+
+
         },
         methods: {
+            formatDate: function () {
+                let date = new Date();
+                let y = date.getFullYear();
+                let MM = date.getMonth() + 1;
+                MM = MM < 10 ? ('0' + MM) : MM;
+                let d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                let s = date.getSeconds();
+                s = s < 10 ? ('0' + s) : s;
+                return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+            },
             goBack: function () {
                 this.$router.go(-1)
             },
@@ -138,11 +169,52 @@
                             });
                         }
                     });
+                //todo 有一个bug 预览返回后不能显示正常的项目名称，直接显示模块ID……
+                that.$refs.wangE.setper(sessionStorage.getItem("overview"));
+                this.postNew.topicn=sessionStorage.getItem("topicname");
+                this.valuecid=sessionStorage.getItem("topiccid");
             },
             onSubmit(formName) {
-                // 在控制台上打印获取到的HTML内容
-                this.$refs.wangE.showHtmlContent();
-                this.$refs.wangE.showMdContent();
+                this.topic.topicname = this.postNew.topicn;
+                this.topic.uid = JSON.parse(localStorage.getItem("loginUser")).uid;
+                this.topic.cid = this.valuecid;
+                this.topic.htmlmainbody=this.$refs.wangE.showHtmlContent();
+                this.topic.mainbody=this.$refs.wangE.showMdContent();
+                this.topic.createtime =this.formatDate();
+                this.topic.updatetime =this.formatDate();
+                console.log(this.topic);
+                    let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/addtopic';
+                    let that = this;
+                    this.axios.post(url, that.topic)
+                        .then(function (response) {
+                            if (response.data.code == 200) {
+                                that.$message({
+                                    type: 'success',
+                                    message: response.data.data
+                                });
+                                sessionStorage.removeItem("overview");
+                                sessionStorage.removeItem("topicname");
+                                sessionStorage.removeItem("topiccid");
+                                that.$router.go(-1);
+                            } else {
+                                that.$message({
+                                    message: response.data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        });
+                    // 在控制台上打印获取到的HTML内容
+                    //this.$refs.wangE.showHtmlContent();
+                //this.$refs.wangE.showMdContent();
+
+            },
+            gooverview: function () {
+                let that = this;
+                sessionStorage.setItem("topicname",that.postNew.topicn);
+                sessionStorage.setItem("topiccid",that.valuecid);
+                sessionStorage.setItem("overview", that.$refs.wangE.showHtmlContent());
+                localStorage.setItem("overview", that.$refs.wangE.showHtmlContent());
+                this.$router.push({path: '/overview'})
             }
 
 
@@ -183,94 +255,94 @@
     }
 
     /*以下全是汉化富文本框所用。*/
-/*
-    .editor {
-        line-height: normal !important;
-        height: 500px;
-    }
+    /*
+        .editor {
+            line-height: normal !important;
+            height: 500px;
+        }
 
-    .ql-snow .ql-tooltip[data-mode=link]::before {
-        content: "请输入链接地址:";
-    }
+        .ql-snow .ql-tooltip[data-mode=link]::before {
+            content: "请输入链接地址:";
+        }
 
-    .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-        border-right: 0px;
-        content: '保存';
-        padding-right: 0px;
-    }
+        .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+            border-right: 0px;
+            content: '保存';
+            padding-right: 0px;
+        }
 
-    .ql-snow .ql-tooltip[data-mode=video]::before {
-        content: "请输入视频地址:";
-    }
+        .ql-snow .ql-tooltip[data-mode=video]::before {
+            content: "请输入视频地址:";
+        }
 
-    .ql-snow .ql-picker.ql-size .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-        content: '14px';
-    }
+        .ql-snow .ql-picker.ql-size .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item::before {
+            content: '14px';
+        }
 
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=small]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]::before {
-        content: '10px';
-    }
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=small]::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]::before {
+            content: '10px';
+        }
 
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]::before {
-        content: '18px';
-    }
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]::before {
+            content: '18px';
+        }
 
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]::before {
-        content: '32px';
-    }
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]::before {
+            content: '32px';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-        content: '文本';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+            content: '文本';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-        content: '标题1';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+            content: '标题1';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-        content: '标题2';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+            content: '标题2';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-        content: '标题3';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+            content: '标题3';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
-        content: '标题4';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+            content: '标题4';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
-        content: '标题5';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
+            content: '标题5';
+        }
 
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
-        content: '标题6';
-    }
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
+            content: '标题6';
+        }
 
-    .ql-snow .ql-picker.ql-font .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-        content: '标准字体';
-    }
+        .ql-snow .ql-picker.ql-font .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item::before {
+            content: '标准字体';
+        }
 
-    .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=serif]::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]::before {
-        content: '衬线字体';
-    }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=serif]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]::before {
+            content: '衬线字体';
+        }
 
-    .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=monospace]::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]::before {
-        content: '等宽字体';
-    }*/
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=monospace]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]::before {
+            content: '等宽字体';
+        }*/
 
 </style>

@@ -1,7 +1,10 @@
 <template>
     <div>
         <!--<div id="wangeditor"></div>-->
-        <div ref="editor" style="text-align:left"/>
+        <div ref="editor" style="text-align:left">
+            <div v-html="per"></div>
+
+        </div>
 
     </div>
 
@@ -17,7 +20,8 @@
         data() {
             return {
                 mdContent: '',
-                htmlContent: ''
+                htmlContent: '',
+                per:''
             }
         },
 
@@ -58,15 +62,27 @@
 
             showMdContent: function () {
                 //console.log(this.mdContent);
-                console.log(editor.txt.text());
+                //console.log(editor.txt.text());
                 return editor.txt.text();
             },
 
             showHtmlContent: function () {
-                console.log(this.htmlContent);
+                //console.log(this.htmlContent);
                 return this.htmlContent;
+            },
+            setper:function (ht) {
+                this.per=ht;
             }
         }
     }
 
+
 </script>
+<style>
+    .w-e-menu{
+        z-index: 1 !important;
+    }
+    .w-e-text-container{
+        z-index: 1 !important;
+    }
+</style>
