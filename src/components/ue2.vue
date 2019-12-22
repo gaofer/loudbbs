@@ -2,7 +2,7 @@
     <div>
         <!--<div id="wangeditor"></div>-->
         <div ref="editor" style="text-align:left">
-            <div v-html="per"></div>
+            <p v-html="per"></p>
 
         </div>
 
@@ -71,7 +71,8 @@
                 return this.htmlContent;
             },
             setper:function (ht) {
-                this.per=ht;
+                //this.per=ht;
+                editor.txt.html(ht);
             }
         }
     }

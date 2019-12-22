@@ -57,7 +57,7 @@
                     stripe>
                 <el-table-column
                         prop="heat"
-                        label="热度"
+                        label="回复数"
                         width="80"
                         align="center">
                 </el-table-column>
@@ -131,62 +131,6 @@
                     topicname: 'ig真能憋',
                     createtime: '11-28 12:26',
                     updatetime: '12-4 11:23',
-                    uid:3
-                }, {
-                    heat: '3',
-                    cname: '英雄联盟',
-                    topicname: '现在冬转又没声音了',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23',
-                    uid:3
-                }, {
-                    heat: '8',
-                    cname: '英雄联盟',
-                    topicname: '奥恩怎么打蛮子呢',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '60',
-                    cname: '英雄联盟',
-                    topicname: '我怎么感觉这个版本比上个版本还无聊。。。',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '95',
-                    cname: '英雄联盟',
-                    topicname: '这个版本，还玩那种塔之子，刷子英雄干嘛',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '5',
-                    cname: '刺客信条',
-                    topicname: '起源bug，大晚上玩差点吓哭了',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '3',
-                    cname: '刺客信条',
-                    topicname: '育碧到底是有多喜欢推箱子啊？',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '4',
-                    cname: '刺客信条',
-                    topicname: 'Uplay怎么也登不上服务器？',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '52',
-                    cname: '刺客信条',
-                    topicname: '起源的dlc值不值得买呢？',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
-                }, {
-                    heat: '20',
-                    cname: '刺客信条',
-                    topicname: '育碧什么时候重制二代三部曲',
-                    createtime: '11-28 12:26',
-                    updatetime: '12-4 11:23'
                 }],
                 currentRow:null
             };
@@ -198,9 +142,10 @@
             },
             handleCurrentChange(val) {
                 this.currentRow = val;
-                console.log("dianji");
+                //console.log("dianji");
                 // 获取tid
-                console.log(this.currentRow.tid);
+                this.$router.push({ path:'/detail/'+this.currentRow.tid  })
+                //console.log(this.currentRow.tid);
             },
             toIndex:function(){
                 /*this.$router.push({ path:'/pindex'  })*/

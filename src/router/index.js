@@ -6,6 +6,7 @@ import Login from  '../views/login.vue'
 import Reg from '../views/reg.vue'
 import Post from '../views/post.vue'
 import Overview from '../views/overview.vue'
+import Detail from '../views/detail.vue'
 
 Vue.use(VueRouter)
 
@@ -50,7 +51,7 @@ const routes = [
     component: Login,
     meta: {
       title: '登录',
-      keepAlive: true, // 需要被缓存
+      keepAlive: false, // 需要被缓存
     }
   },
   {
@@ -59,7 +60,7 @@ const routes = [
     component: Reg,
     meta: {
       title: '注册',
-      keepAlive: true, // 需要被缓存
+      keepAlive: false, // 需要被缓存
     }
   },
   {
@@ -68,7 +69,7 @@ const routes = [
     component: Post,
     meta: {
       title: '发帖',
-      keepAlive: true, // 需要被缓存
+      keepAlive: false, // 需要被缓存
     }
   },
   {
@@ -77,7 +78,16 @@ const routes = [
     component: Overview,
     meta: {
       title: '预览',
-      keepAlive: true, // 需要被缓存
+      keepAlive: false, // 需要被缓存
+    }
+  },
+  {
+    path: '/detail/:tid',
+    name: 'detail',
+    component: Detail,
+    meta: {
+      title: '详情',
+      keepAlive: false, // 需要被缓存
     }
   }
 

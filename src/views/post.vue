@@ -63,8 +63,16 @@
                                     </qeditor2>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click="onSubmit('postNew')">立即创建</el-button>
-                                    <el-button @click="gooverview">预览</el-button>
+                                    <el-button type="primary" @click="onSubmit('postNew')">发表帖子</el-button>
+                                    <el-popover
+                                            placement="top-start"
+                                            title="提示"
+                                            width="200"
+                                            trigger="hover"
+                                            content="我们不推荐您在未编辑的情况下再次使用该功能，如果希望再次确认，请修改一部分文本。">
+                                        <el-button @click="gooverview" slot="reference" style="margin-left: 10px">预览
+                                        </el-button>
+                                    </el-popover>
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -131,7 +139,6 @@
             }
 
 
-
         },
         methods: {
             formatDate: function () {
@@ -171,49 +178,53 @@
                     });
                 //todo 有一个bug 预览返回后不能显示正常的项目名称，直接显示模块ID……
                 that.$refs.wangE.setper(sessionStorage.getItem("overview"));
-                this.postNew.topicn=sessionStorage.getItem("topicname");
-                this.valuecid=sessionStorage.getItem("topiccid");
+                if (sessionStorage.getItem("topicname") != 'null') {
+                    this.postNew.topicn = sessionStorage.getItem("topicname");
+                }
+                if (sessionStorage.getItem("topiccid") != 'null') {
+                    this.valuecid = sessionStorage.getItem("topiccid");
+                }
             },
             onSubmit(formName) {
                 this.topic.topicname = this.postNew.topicn;
                 this.topic.uid = JSON.parse(localStorage.getItem("loginUser")).uid;
                 this.topic.cid = this.valuecid;
-                this.topic.htmlmainbody=this.$refs.wangE.showHtmlContent();
-                this.topic.mainbody=this.$refs.wangE.showMdContent();
-                this.topic.createtime =this.formatDate();
-                this.topic.updatetime =this.formatDate();
+                this.topic.htmlmainbody = this.$refs.wangE.showHtmlContent();
+                this.topic.mainbody = this.$refs.wangE.showMdContent();
+                this.topic.createtime = this.formatDate();
+                this.topic.updatetime = this.formatDate();
                 console.log(this.topic);
-                    let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/addtopic';
-                    let that = this;
-                    this.axios.post(url, that.topic)
-                        .then(function (response) {
-                            if (response.data.code == 200) {
-                                that.$message({
-                                    type: 'success',
-                                    message: response.data.data
-                                });
-                                sessionStorage.removeItem("overview");
-                                sessionStorage.removeItem("topicname");
-                                sessionStorage.removeItem("topiccid");
-                                that.$router.go(-1);
-                            } else {
-                                that.$message({
-                                    message: response.data.msg,
-                                    type: 'error'
-                                });
-                            }
-                        });
-                    // 在控制台上打印获取到的HTML内容
-                    //this.$refs.wangE.showHtmlContent();
+                let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/addtopic';
+                let that = this;
+                this.axios.post(url, that.topic)
+                    .then(function (response) {
+                        if (response.data.code == 200) {
+                            that.$message({
+                                type: 'success',
+                                message: response.data.data
+                            });
+                            sessionStorage.removeItem("overview");
+                            sessionStorage.removeItem("topicname");
+                            sessionStorage.removeItem("topiccid");
+                            that.$router.go(-1);
+                        } else {
+                            that.$message({
+                                message: response.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    });
+                // 在控制台上打印获取到的HTML内容
+                //this.$refs.wangE.showHtmlContent();
                 //this.$refs.wangE.showMdContent();
 
             },
             gooverview: function () {
                 let that = this;
-                sessionStorage.setItem("topicname",that.postNew.topicn);
-                sessionStorage.setItem("topiccid",that.valuecid);
+                sessionStorage.setItem("topicname", that.postNew.topicn);
+                sessionStorage.setItem("topiccid", that.valuecid);
                 sessionStorage.setItem("overview", that.$refs.wangE.showHtmlContent());
-                localStorage.setItem("overview", that.$refs.wangE.showHtmlContent());
+                //localStorage.setItem("overview", that.$refs.wangE.showHtmlContent());
                 this.$router.push({path: '/overview'})
             }
 

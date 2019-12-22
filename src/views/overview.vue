@@ -14,8 +14,8 @@
         },
         methods: {
             initPage: function () {
-                if(localStorage.getItem("overview")!=""){
-                    this.htmlContent= localStorage.getItem("overview");
+                if(sessionStorage.getItem("overview")!=""){
+                    this.htmlContent= sessionStorage.getItem("overview");
                 }
             }
         },
@@ -23,7 +23,7 @@
             this.initPage();
         },
         destroyed: function () {
-            localStorage.removeItem('overview');
+            //sessionStorage.removeItem('overview');
         }
     }
 </script>
