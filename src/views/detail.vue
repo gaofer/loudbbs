@@ -158,7 +158,7 @@
                 this.$router.go(-1)
             },
             inittopic: function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/topicdetal/' + this.tid;
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/topic/topicdetal/' + this.tid;
                 let that = this;
                 this.axios.get(url, {})
                     .then(function (response) {
@@ -174,7 +174,7 @@
                     });
             },
             initcommon: function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/common/' + this.tid;
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/common/' + this.tid;
                 let that = this;
                 this.axios.get(url, {})
                     .then(function (response) {
@@ -205,7 +205,7 @@
                 this.postcommons.maincommon=this.$refs.wangE.showHtmlContent();
                 this.postcommons.tid=this.tid;
                 this.postcommons.updatetime=this.formatDate();
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/common/';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/common/';
                 let that = this;
                 this.axios.post(url, that.postcommons)
                     .then(function (response) {
@@ -260,14 +260,14 @@
         padding: 5px;
         text-align: left;
         font-size: smaller;
-        border: #d2f0ff solid 1px;
+        border: #dcdfe6 solid 1px;
     }
 
     .commonmain {
         padding: 5px;
         text-align: left;
         font-size: smaller;
-        border: #d2f0ff solid 1px;
+        border: #dcdfe6 solid 1px;
     }
 
 </style>

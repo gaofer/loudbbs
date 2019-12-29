@@ -117,7 +117,7 @@
                 this.$refs[formName].resetFields();
             },
             login: function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/t-users/login';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/t-users/login';
                 let that = this;
                 this.axios.get(url, {
                     params: {
@@ -150,9 +150,33 @@
                         }
                     })
             },
+            open() {
+                var admin=JSON.parse(localStorage.getItem("loginUser")).access;
+                if(admin=='admin'){
+                    this.$confirm('您以管理员身份进行操作，请问是否进入后台管理页面？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'info'
+                    }).then(() => {
+                        this.$router.push({ path:'/adminmain'  });
+                        this.$message({
+                            type: 'success',
+                            message: '去管理页面!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '欢迎您！'
+                        });
+                    });
+                }
+            },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
+        },
+        destroyed() {
+            this.open();
         }
     }
 </script>

@@ -163,7 +163,7 @@
                 console.log(key, keyPath);
             },
             initPage: function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/category/';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/category/';
                 let that = this;
                 this.axios.get(url, {})
                     .then(function (response) {
@@ -193,8 +193,8 @@
                 this.topic.mainbody = this.$refs.wangE.showMdContent();
                 this.topic.createtime = this.formatDate();
                 this.topic.updatetime = this.formatDate();
-                console.log(this.topic);
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/addtopic';
+                //console.log(this.topic);
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/topic/addtopic';
                 let that = this;
                 this.axios.post(url, that.topic)
                     .then(function (response) {

@@ -131,7 +131,7 @@
                 }
             };
             var validateUsername = (rule, value, callback) => {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/t-users/countusername';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/t-users/countusername';
                 let that = this;
                 this.axios.get(url, {
                     params: {
@@ -210,7 +210,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (this.$refs.dragDiv.confirmSuccess) {
-                            let url = 'http://' + 'localhost' + ':8080/loudbbs/t-users/reg';
+                            let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/t-users/reg';
                             let that = this;
                             this.axios.post(url, that.userReg)
                                 .then(function (response) {
@@ -219,7 +219,7 @@
                                             message: '注册成功，已为您登录。',
                                             type: 'success'
                                         });
-                                        let url2 = 'http://' + 'localhost' + ':8080/loudbbs/t-users/login';
+                                        let url2 = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/t-users/login';
                                         that.axios.get(url2, {
                                             params: {
                                                 username: that.userReg.username,
@@ -277,7 +277,7 @@
                 this.timer = new Date().getTime()
             },
             login: function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/t-users/login';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/t-users/login';
                 let that = this;
                 that.axios.get(url, {
                     params: {

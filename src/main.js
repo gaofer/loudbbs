@@ -5,7 +5,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import globalVariable from "../global_variable.js";
 
+Vue.prototype.GLOBAL = globalVariable
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false

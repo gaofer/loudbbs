@@ -49,46 +49,46 @@
             </el-header>
         <el-main>
             <el-table
-                    :data="tableData"
-                    height="700"
-                    border
-                    @current-change="handleCurrentChange"
-                    style="width: 100%"
-                    stripe>
-                <el-table-column
-                        prop="heat"
-                        label="回复数"
-                        width="80"
-                        align="center">
-                </el-table-column>
-                <el-table-column
-                        prop="cname"
-                        label="类别"
-                        width="80"
-                        align="center">
-                </el-table-column>
-                <el-table-column
-                        prop="topicname"
-                        label="标题"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="mainbody"
-                        label="详情">
-                </el-table-column>
-                <el-table-column
-                        prop="createtime"
-                        label="创建时间"
-                        width="180"
-                        align="center">
-                </el-table-column>
-                <el-table-column
-                        prop="updatetime"
-                        label="最后更新"
-                        width="180"
-                        align="center">
-                </el-table-column>
-            </el-table>
+                :data="tableData"
+                height="700"
+                border
+                @current-change="handleCurrentChange"
+                style="width: 100%"
+                stripe>
+            <el-table-column
+                    prop="heat"
+                    label="回复数"
+                    width="80"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="cname"
+                    label="类别"
+                    width="80"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="topicname"
+                    label="标题"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="mainbody"
+                    label="详情">
+            </el-table-column>
+            <el-table-column
+                    prop="createtime"
+                    label="创建时间"
+                    width="180"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="updatetime"
+                    label="最后更新"
+                    width="180"
+                    align="center">
+            </el-table-column>
+        </el-table>
             <!--因为使用了可以滚动的表格，所以没有做分页
             <el-pagination
                     :page-size="20"
@@ -179,11 +179,30 @@
                     });
                 });
             },
-            getfromat:function(){
+            open() {
+                var admin=JSON.parse(localStorage.getItem("loginUser")).access;
+                if(admin=='admin'){
+                    this.$confirm('您以管理员身份进行操作，请问是否进入后台管理页面？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'info'
+                    }).then(() => {
+                        this.$router.push({ path:'/adminmain'  });
+                        this.$message({
+                            type: 'success',
+                            message: '去管理页面!'
+                        });
 
+                    }).catch(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '欢迎您！'
+                        });
+                    });
+                }
             },
             initPage:function () {
-                let url = 'http://' + 'localhost' + ':8080/loudbbs/topic/';
+                let url = 'http://' + this.GLOBAL.BaseURL + ':' + this.GLOBAL.PORT + '/loudbbs/topic/';
                 let that = this;
                 this.axios.get(url, {
                 })
@@ -204,6 +223,7 @@
         },
         mounted:function(){
             this.initPage();
+            //this.open();
         },
         created:function(){
             if(JSON.parse(localStorage.getItem("loginUser")).username!=""){
