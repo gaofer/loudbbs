@@ -57,6 +57,10 @@
 - [ ] 美化浏览界面
 - [ ] 新建评论时按事务提交，避免中途出错
 
+## 作者
+Gaofer Chou. 大概是个自恋狂。  
+<img src="https://github.com/gaofer/loudbbsBack/blob/master/WeChat.png"  height="150" width="150"/>
+
 ## 项目自带README.md 
 ### Project setup
 ```
